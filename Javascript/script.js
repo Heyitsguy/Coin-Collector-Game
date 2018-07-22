@@ -30,7 +30,7 @@ function preload() {
 
     game.load.crossOrigin = 'anonymous'; // For loading external assets
     // Load player image
-    game.load.image('player','../Images/Mariopix.png');
+    game.load.image('player','https://heyitsguy.github.io/Coin-Collector-Game/Images/Mariopix.png');
 
     game.load.image('coin', 'https://upload.wikimedia.org/wikipedia/commons/4/46/Bitcoin.svg');
 
