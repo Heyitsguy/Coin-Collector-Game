@@ -12,6 +12,9 @@ var player_speed = 600;
 var coin;
 var coin_padding = 60;
 var score = 0;
+var score_text;
+var gameOverText;
+var enemySpeed=400;
 
 //Global functions
 
@@ -33,6 +36,7 @@ function preload() {
     game.load.image('player','../Images/Mariopix.png');
 
     game.load.image('coin', 'https://upload.wikimedia.org/wikipedia/commons/4/46/Bitcoin.svg');
+    game.load.image('enemy', '../Images/Wario.png');
 
 }
 
@@ -50,6 +54,19 @@ function create() {
     game.physics.enable(player, Phaser.Physics.ARCADE); // Enable player physics
     player.body.collideWorldBounds = true; // Keep player inside the screen
 
+    enemy = game.add.sprite(360,400,'enemy');
+    enemy.scale.setTo(0.5,0.5);
+    game.physics.enable(enemy, Phaser.Physics.ARACDE);
+
+    gameOverText = game.add.text(0,0,"",{
+      fill:'white',
+      font:'50pt Arial',
+      boundsAlignH: 'center',
+      boundsAlignV: 'middle'
+    });
+
+    gameOverText.setTextBounds(0,0,640,480);
+
     // Add Key
     coin = game.add.sprite(200, 200, 'coin'); // Add key sprite at x, y position
     coin.scale.setTo(0.4, 0.4); //scale the image
@@ -57,6 +74,9 @@ function create() {
     coin.body.immovable = true; // Keep key from moving
     // Picks a random location on the stage for the coin to appear.
     randomCoinPoisition();
+    score_text = game.add.text(15,15,"Score:" + score,{
+      fill:"white"
+    });
 }
 
 // Runs every frame
@@ -81,9 +101,20 @@ function update() {
     var speed_dir = new Phaser.Point(speed_x, speed_y); // make speed vector
     player.body.velocity = speed_dir; // Set player velocity
 
+    var enemyDir = new Phaser.Point(enemySpeed,0);
+    if(enemy.world.x > 640){
+      enemy.position = new Phaser.Point(0,player.world.y)
+    }
+    enemy.body.velocity = enemyDir;
+
     game.physics.arcade.collide(player, coin, function(){
       randomCoinPoisition();
       score++;
+      score_text.text = "Score: " +score;
       document.getElementById("score").innerHTML = score;
     }); // Player-key collision
+    game.physics.arcade.collide(player, enemy, function(){
+      player.kill();
+      gameOverText.text = "GAME OVER";
+    });
 }
