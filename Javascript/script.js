@@ -162,9 +162,10 @@ function update() {
       player.kill();
       gameOverText.text = "GAME OVER";
       resetText.text = "Hit the R key to Restart!";
-    });
       if(newRecord === true){
         gameOverText.text += "\n New Record!";
       }
+    });
+
 
 }
